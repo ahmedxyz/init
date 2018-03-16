@@ -1,0 +1,10 @@
+#echo "0 0 * * * $(pwd)/04" >> /etc/crontab
+
+if [ ! -f /etc/crontab-sum ]; then
+	md5sum /etc/crontab > /etc/crontab-sum
+fi
+
+if [ "$(cat /etc/crontab-sum)" != "$(md5sum /etc/crontab)" ]; then
+	echo "/etc/crontab was modified" | mail -s "Crontab was modified" root
+	md5sum /etc/crontab > /etc/crontab-sum
+fi
